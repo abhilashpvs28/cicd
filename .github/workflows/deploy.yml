@@ -1,4 +1,4 @@
-# this is ci code
+# this is ci/cd code 
 name: Deploy to EC2
 
 on:
