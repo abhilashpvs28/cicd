@@ -1,3 +1,4 @@
+
 # this is ci/cd code 
 name: Deploy to EC2
 
@@ -26,7 +27,7 @@ jobs:
             if [ -d .git ]; then
               git fetch origin main && git reset --hard origin/main
             else
-              git clone https://github.com/<user>/myapp.git .
+              git clone https://github.com/abhilashpvs28/cicd.git .
             fi
             npm ci
             pm2 startOrReload ecosystem.config.js
