@@ -1,5 +1,3 @@
-# .github/workflows/deploy.ymls
-
 name: Deploy to EC2
 
 on:
@@ -19,17 +17,23 @@ jobs:
       - name: SSH & deploy
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_KEY:  ${{ secrets.EC2_KEY }}
+          EC2_KEY: ${{ secrets.EC2_KEY }}
           EC2_USER: ec2-user
         run: |
           echo "$EC2_KEY" > cicd-key.pem && chmod 400 cicd-key.pem
           ssh -o StrictHostKeyChecking=no -i cicd-key.pem $EC2_USER@$EC2_HOST << 'EOF'
             set -e
+            # Ensure ~/myapp exists
             mkdir -p ~/myapp && cd ~/myapp
-            if [ -d .git ]; then
+            # If .git exists, update the repository
+            if [ -d cicd/.git ]; then
+              cd cicd
               git fetch origin main && git reset --hard origin/main
             else
+              # Remove any existing cicd directory to avoid conflicts
+              rm -rf cicd
               git clone https://github.com/abhilashpvs28/cicd.git
+              cd cicd
             fi
             npm ci
             pm2 startOrReload ecosystem.config.js
