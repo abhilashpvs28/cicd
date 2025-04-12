@@ -23,7 +23,7 @@ jobs:
           EC2_USER: ec2-user
         run: |
           echo "$EC2_KEY" > cicd-key.pem && chmod 400 cicd-key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem $EC2_USER@$EC2_HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i cicd-key.pem $EC2_USER@$EC2_HOST << 'EOF'
             set -e
             mkdir -p ~/myapp && cd ~/myapp
             if [ -d .git ]; then
